@@ -1,0 +1,301 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Proiect2.MainPage"
+             BackgroundColor="#F7F9F8">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Color x:Key="PrimaryGreen">#2D6A4F</Color>
+            <Color x:Key="DarkGreen">#1B4332</Color>
+            <Color x:Key="LightGreen">#D8F3DC</Color>
+            <Color x:Key="AccentOrange">#E07A5F</Color>
+            <Color x:Key="SoftWhite">#FFFFFF</Color>
+
+            <Style x:Key="HeaderLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="18"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+                <Setter Property="TextColor" Value="{StaticResource PrimaryGreen}"/>
+                <Setter Property="Margin" Value="0,0,0,5"/>
+            </Style>
+
+            <Style x:Key="QuestionLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="14"/>
+                <Setter Property="TextColor" Value="#52796F"/>
+                <Setter Property="Margin" Value="5,10,0,2"/>
+            </Style>
+
+            <Style x:Key="ModernInputFrame" TargetType="Border">
+                <Setter Property="StrokeShape" Value="RoundRectangle 12"/>
+                <Setter Property="StrokeThickness" Value="1"/>
+                <Setter Property="Stroke" Value="{StaticResource LightGreen}"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource SoftWhite}"/>
+                <Setter Property="Padding" Value="15,2"/>
+                <Setter Property="HeightRequest" Value="50"/>
+            </Style>
+
+            <Style x:Key="CardFrame" TargetType="Frame">
+                <Setter Property="CornerRadius" Value="20"/>
+                <Setter Property="HasShadow" Value="True"/>
+                <Setter Property="BorderColor" Value="Transparent"/>
+                <Setter Property="BackgroundColor" Value="{StaticResource SoftWhite}"/>
+                <Setter Property="Padding" Value="20"/>
+                <Setter Property="Margin" Value="5,0,5,20"/>
+                <Setter Property="Shadow" Value="{Shadow Brush=#95A5A6, Offset='2,5', Opacity=0.2, Radius=10}"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Grid Grid.Row="0" HeightRequest="100" Padding="25,40,25,0">
+            <Grid.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#1B4332" Offset="0.0" />
+                    <GradientStop Color="#40916C" Offset="1.0" />
+                </LinearGradientBrush>
+            </Grid.Background>
+            <Grid ColumnDefinitions="*, Auto">
+                <VerticalStackLayout VerticalOptions="Center">
+                    <Label Text="EcoTracker" TextColor="White" FontSize="14" Opacity="0.8"/>
+                    <Label Text="Carbon Calculator" TextColor="White" FontSize="24" FontAttributes="Bold"/>
+                </VerticalStackLayout>
+                <Button Grid.Column="1" 
+                        Text="📜 History" 
+                        Command="{Binding ToggleHistoryCommand}"
+                        BackgroundColor="White"
+                        TextColor="{StaticResource PrimaryGreen}"
+                        FontAttributes="Bold"
+                        CornerRadius="15"
+                        HeightRequest="40"
+                        VerticalOptions="Center"/>
+            </Grid>
+        </Grid>
+
+        <ScrollView x:Name="PageScrollView" Grid.Row="1" Padding="15,20">
+            <VerticalStackLayout Spacing="10">
+
+                <Frame IsVisible="{Binding IsHistoryVisible}" CornerRadius="15" Padding="0" BackgroundColor="White" BorderColor="{StaticResource LightGreen}">
+                    <ListView ItemsSource="{Binding HistoryList}" HeightRequest="400" HasUnevenRows="True" SeparatorColor="{StaticResource LightGreen}">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <Grid Padding="20,15" ColumnDefinitions="*, Auto" BackgroundColor="White">
+                                        <VerticalStackLayout Spacing="2">
+                                            <Label Text="{Binding Date, StringFormat='{0:MMM dd, yyyy}'}" FontAttributes="Bold" TextColor="{StaticResource PrimaryGreen}"/>
+                                            <Label Text="{Binding Date, StringFormat='{0:HH:mm}'}" FontSize="12" TextColor="Gray"/>
+                                        </VerticalStackLayout>
+                                        <Frame Grid.Column="1" BackgroundColor="{StaticResource LightGreen}" Padding="10,5" CornerRadius="8" BorderColor="Transparent">
+                                            <Label Text="{Binding TotalTons, StringFormat='{0:F2} t'}" TextColor="{StaticResource DarkGreen}" FontAttributes="Bold"/>
+                                        </Frame>
+                                    </Grid>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Frame>
+
+                <VerticalStackLayout IsVisible="{Binding IsCalculatorVisible}" Spacing="5">
+
+                    <Frame Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="🚗 Travel Habits" Style="{StaticResource HeaderLabel}"/>
+                            <BoxView HeightRequest="1" Color="{StaticResource LightGreen}" Margin="0,0,0,10"/>
+
+                            <Label Text="Annual Flights" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <Entry Placeholder="0" Text="{Binding FlightsCount}" Keyboard="Numeric" TextColor="{StaticResource DarkGreen}"/>
+                                    <Label Grid.Column="1" Text="flights" VerticalOptions="Center" TextColor="Gray" FontSize="12"/>
+                                </Grid>
+                            </Border>
+
+                            <Label Text="Vehicle Type" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Picker SelectedIndex="{Binding VehicleTypeIndex}" TextColor="{StaticResource DarkGreen}">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>⛽ Gasoline/Diesel</x:String>
+                                            <x:String>🔋 Hybrid</x:String>
+                                            <x:String>⚡ Electric</x:String>
+                                            <x:String>🚲 Walk/Bike</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </Border>
+
+                            <Label Text="Annual Driving Distance" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <Entry Placeholder="e.g. 15000" Text="{Binding KmDriven}" Keyboard="Numeric" TextColor="{StaticResource DarkGreen}"/>
+                                    <Label Grid.Column="1" Text="km/year" VerticalOptions="Center" TextColor="Gray" FontSize="12"/>
+                                </Grid>
+                            </Border>
+
+                            <Label Text="Public Transit Usage" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Picker SelectedIndex="{Binding TransitFreqIndex}" TextColor="{StaticResource DarkGreen}">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>❌ Rarely / Never</x:String>
+                                            <x:String>📅 Weekly</x:String>
+                                            <x:String>🚍 Daily Commute</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </Border>
+
+                            <Label Text="Transit Type" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Picker SelectedIndex="{Binding TransitTypeIndex}" TextColor="{StaticResource DarkGreen}">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>🚌 Bus</x:String>
+                                            <x:String>🚆 Train / Metro</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </Border>
+
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="🏠 Home &amp; Energy" Style="{StaticResource HeaderLabel}"/>
+                            <BoxView HeightRequest="1" Color="{StaticResource LightGreen}" Margin="0,0,0,10"/>
+
+                            <Label Text="Monthly Electricity" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <Entry Placeholder="e.g. 300" Text="{Binding MonthlyKwh}" Keyboard="Numeric" TextColor="{StaticResource DarkGreen}"/>
+                                    <Label Grid.Column="1" Text="kWh" VerticalOptions="Center" TextColor="Gray" FontSize="12"/>
+                                </Grid>
+                            </Border>
+
+                            <Label Text="Tech Gadget Upgrades" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Picker SelectedIndex="{Binding GadgetFreqIndex}" TextColor="{StaticResource DarkGreen}">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>🐢 Rarely (keep for years)</x:String>
+                                            <x:String>🐇 Occasional (2-3 yrs)</x:String>
+                                            <x:String>🐆 Frequent (every year)</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </Border>
+
+                            <Grid ColumnDefinitions="*, Auto" Margin="5,10,0,0">
+                                <Label Text="Renewable Energy Usage" Style="{StaticResource QuestionLabel}" VerticalOptions="Center" Margin="0"/>
+                                <Label Grid.Column="1" Text="{Binding RenewableEnergyPercent, StringFormat='{0:F0}%'}" TextColor="{StaticResource PrimaryGreen}" FontAttributes="Bold"/>
+                            </Grid>
+                            <Slider Value="{Binding RenewableEnergyPercent}" Maximum="100" Minimum="0" 
+                                    MinimumTrackColor="{StaticResource PrimaryGreen}" 
+                                    MaximumTrackColor="{StaticResource LightGreen}" 
+                                    ThumbColor="{StaticResource DarkGreen}"/>
+
+                            <Label Text="New Clothes / Year" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Entry Placeholder="e.g. 15 items" Text="{Binding NewGarments}" Keyboard="Numeric" TextColor="{StaticResource DarkGreen}"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Frame Style="{StaticResource CardFrame}">
+                        <VerticalStackLayout Spacing="10">
+                            <Label Text="🥗 Diet &amp; Waste" Style="{StaticResource HeaderLabel}"/>
+                            <BoxView HeightRequest="1" Color="{StaticResource LightGreen}" Margin="0,0,0,10"/>
+
+                            <Label Text="Diet Style" Style="{StaticResource QuestionLabel}"/>
+                            <Border Style="{StaticResource ModernInputFrame}">
+                                <Picker SelectedIndex="{Binding DietTypeIndex}" TextColor="{StaticResource DarkGreen}">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>🍖 Meat Eater</x:String>
+                                            <x:String>🥚 Vegetarian</x:String>
+                                            <x:String>🥗 Vegan</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </Border>
+
+                            <Grid ColumnDefinitions="*, Auto" Margin="5,10,0,0">
+                                <Label Text="Composting Habits" Style="{StaticResource QuestionLabel}" VerticalOptions="Center" Margin="0"/>
+                                <Label Grid.Column="1" Text="{Binding CompostPercent, StringFormat='{0:F0}%'}" TextColor="{StaticResource PrimaryGreen}" FontAttributes="Bold"/>
+                            </Grid>
+                            <Slider Value="{Binding CompostPercent}" Maximum="100" Minimum="0" 
+                                    MinimumTrackColor="{StaticResource AccentOrange}" 
+                                    MaximumTrackColor="{StaticResource LightGreen}" 
+                                    ThumbColor="{StaticResource AccentOrange}"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="5,10">
+                        <Button Grid.Column="0"
+                                Text="🔄 Reset"
+                                Command="{Binding ResetCommand}"
+                                BackgroundColor="White"
+                                BorderColor="{StaticResource AccentOrange}"
+                                BorderWidth="2"
+                                TextColor="{StaticResource AccentOrange}"
+                                CornerRadius="25"
+                                HeightRequest="50"
+                                FontAttributes="Bold"/>
+
+                        <Button Grid.Column="1"
+                                Text="Calculate 🌱"
+                                Command="{Binding CalculateCommand}"
+                                BackgroundColor="{StaticResource PrimaryGreen}"
+                                TextColor="White"
+                                CornerRadius="25"
+                                HeightRequest="50"
+                                FontAttributes="Bold"
+                                Shadow="{Shadow Brush=Black, Offset='0,4', Opacity=0.2}"/>
+                    </Grid>
+
+                    <Frame x:Name="ResultSection" BackgroundColor="#E8F5E9" BorderColor="{StaticResource PrimaryGreen}" CornerRadius="20" Padding="25" Margin="0,20,0,0" IsVisible="{Binding ResultVisible}">
+                        <VerticalStackLayout Spacing="15">
+                            <Label Text="YOUR IMPACT" HorizontalOptions="Center" FontSize="12" CharacterSpacing="2" TextColor="{StaticResource PrimaryGreen}"/>
+                            <Label Text="{Binding TotalTonsResult, StringFormat='{0:F2} tons'}" FontSize="40" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource DarkGreen}"/>
+                            <Label Text="Annual CO₂ Emissions" FontSize="14" TextColor="Gray" HorizontalOptions="Center" Margin="0,-10,0,0"/>
+
+                            <Grid RowDefinitions="Auto, Auto" Margin="0,15,0,0">
+                                <ProgressBar Progress="{Binding FootprintProgress}" ProgressColor="{Binding ResultColor}" ScaleY="4" BackgroundColor="#D3D3D3"/>
+                                <Grid Grid.Row="1" ColumnDefinitions="Auto, *, Auto" Margin="0,10,0,0">
+                                    <Label Grid.Column="0" Text="0 tons" FontSize="10" TextColor="Gray"/>
+                                    <Label Grid.Column="2" Text="Global Avg (4t)" FontSize="10" TextColor="Black" FontAttributes="Bold"/>
+                                </Grid>
+                            </Grid>
+                            <Label Text="{Binding ComparisonMessage}" HorizontalOptions="Center" TextColor="{Binding ResultColor}" FontAttributes="Italic" Margin="0,5,0,0"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Label Text="💡 Did You Know?" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="{StaticResource PrimaryGreen}" 
+                           Margin="10,30,0,10"/>
+
+                    <Image Source="carbon_cycle.png" 
+                           Aspect="AspectFit" 
+                           HeightRequest="200" 
+                           IsVisible="False" />
+
+                    <Frame Style="{StaticResource CardFrame}" BackgroundColor="#F1FAEE">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="• Global Goal: 2.0 tons/year to stop warming." TextColor="#457B9D"/>
+                            <Label Text="• Your carbon footprint is the sum total of all greenhouse gas emissions you generate, directly and indirectly, over a certain period of time." TextColor="#457B9D"/>
+                            <Label Text="• Direct emissions (Scope 1): The emissions you directly cause, such as burning petrol in your car or gas for heating." TextColor="#457B9D"/>
+                            <Label Text="• Indirect emissions from energy (Scope 2): Emissions caused by producing the electricity or heat you consume." TextColor="#457B9D"/>
+                            <Label Text="• Other indirect emissions (Scope 3): Emissions from the wider supply chain, such as the production of the clothes you buy or the waste you generate." TextColor="#457B9D"/>
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <Label Text="Built with .NET MAUI" HorizontalOptions="Center" TextColor="#B0B0B0" FontSize="11" Margin="0,20,0,40"/>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
