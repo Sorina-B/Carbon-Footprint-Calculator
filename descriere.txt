@@ -1,0 +1,22 @@
+	=Calculator al amprentei de dioxid de carbon - Aplicatie MAUI=
+
+
+   Aplicatia calculeaza cu aproximatie cantitatea de dioxid de carbon emisa de o persoana
+ in mediul inconjurator in cadrul unui an, bazandu-se pe mai multi factori:
+-numarul de zboruri dintr-un an;
+-numarul de kilometri condusi pe an;
+-tipul masinii(electric, hibrid, euro 5,...);
+-cat de des folosesti transportul in comun;
+-tipul de transport in comun folosit(autobuz, tren, bicicleta,...);
+-numarul de kWh folositi pe luna in casa;
+-cantitatea de energie verde folosita in casa;
+-cat de des cumperi haine noi;
+-cat de des iti inlocuiesti aparatura;
+-tipul de dieta (vegan, cantitatea de carne consumata...);
+-obiceiul de compostare;
+
+  Sunt folosite o serie de formule pentru a estima cantitatea de CO2 emisa. Aplicatia are 
+rolul de a ajuta consumatorii sa constientizeze si sa isi monitorizeze amprenta de CO2 a 
+propriilor actiuni in mediul incojurator. Prin cunoasterea acestor date utilizatorii pot
+deduce cai practice prin care isi pot reduce amprenta, astfel ajutand mediul inconjurator
+si totodata pe ei insisi.

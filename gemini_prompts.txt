@@ -1,0 +1,43 @@
+1)  please help me make an app that 
+calculate your carbon footprint based on data introduced by users in maui c#
+
+2) help me add a footer where i can add details about the average emission
+and helpful tips;
+
+3) i want the input fields to be organized in three main categories: travel, 
+food and home. Also, include this fields: 1. for the travel category: how many 
+flights took on a year, the type of yur vehicle(electric, hibrid,..), how 
+often you use public transit and the type of it(bus, train,...) 2. for the 
+home category: how many new garments do you buy in a year, how often do you
+buy new electronic gadgets, if you use solar pannels,... 
+3.if you practice composting;
+
+
+4) Make the look of it more aesthetically pleasing(example: frame the input 
+fileds, add spacings, numerotate fields);
+
+5)Please fix these bugs: -the info within the frame is not positioned in the
+middle;
+-the frame does not show the selected option; 
+-the picker is buggy;
+
+6)Change the buttons from the "I practice composting" and "I use solar pannels'
+to Composte rate (%) and Renawable Energy (%);
+
+7)try use the following formulas( modify them if necessary) to calculate the 
+amount of CO2 generated: 
+-for electricity: no. Kwh x 0.417 kg CO2/Kwh x (1- (renewable% /100));
+-for clothing: no. clothes bought x 15 kg CO2;
+-for food: type of diet(1000 kg Co2/ year if vegan, 1200 kg Co2/year if vegetarian,
+2000 kg CO2/year if meat base diet) x (1-(composting%/100) x 0.25);
+
+8)Add a reset button and when clicking the calculate carbon footprint button 
+automatically scroll down to the result;
+
+9)help me create a database for my project using SQLite where i can save a 
+history of past calculations
+
+10) i want to add a history button in the header of the page that shows the
+history in  a  list view when clicked;
+
+11)make the appearance more colorful and beautiful, add more details to the aspect.
