@@ -13,16 +13,15 @@ namespace Proiect2
 
         public DatabaseService()
         {
-            // This gets the valid folder path for Android/iOS/Windows
+
             string dbPath = Path.Combine(FileSystem.AppDataDirectory, DbName);
 
             _connection = new SQLiteAsyncConnection(dbPath);
 
-            // This creates the table if it doesn't exist yet
+
             _connection.CreateTableAsync<CarbonRecord>();
         }
 
-        // 2. Method to Add a Record
         public async Task AddRecord(double tons)
         {
             var record = new CarbonRecord
@@ -35,7 +34,7 @@ namespace Proiect2
             await _connection.InsertAsync(record);
         }
 
-        // 3. Method to Get All Records (for history view)
+
         public async Task<List<CarbonRecord>> GetHistory()
         {
             return await _connection.Table<CarbonRecord>()
