@@ -9,7 +9,6 @@ namespace Proiect2
     {
         protected readonly DatabaseService _dbService;
 
-        // --- 1. TRAVEL INPUTS ---
         private double _kmDriven;
         public double KmDriven { get => _kmDriven; set { _kmDriven = value; OnPropertyChanged(); } }
 
@@ -19,14 +18,12 @@ namespace Proiect2
         private int _flightsCount;
         public int FlightsCount { get => _flightsCount; set { _flightsCount = value; OnPropertyChanged(); } }
 
-        // RESTORED: Public Transit Properties
         private int _transitFreqIndex = 0;
         public int TransitFreqIndex { get => _transitFreqIndex; set { _transitFreqIndex = value; OnPropertyChanged(); } }
 
         private int _transitTypeIndex = 0;
         public int TransitTypeIndex { get => _transitTypeIndex; set { _transitTypeIndex = value; OnPropertyChanged(); } }
 
-        // --- 2. HOME INPUTS ---
         private double _monthlyKwh;
         public double MonthlyKwh { get => _monthlyKwh; set { _monthlyKwh = value; OnPropertyChanged(); } }
 
@@ -36,18 +33,17 @@ namespace Proiect2
         private int _newGarments;
         public int NewGarments { get => _newGarments; set { _newGarments = value; OnPropertyChanged(); } }
 
-        // RESTORED: Gadget Properties
         private int _gadgetFreqIndex = 0;
         public int GadgetFreqIndex { get => _gadgetFreqIndex; set { _gadgetFreqIndex = value; OnPropertyChanged(); } }
 
-        // --- 3. FOOD INPUTS ---
+  
         private int _dietTypeIndex = 0;
         public int DietTypeIndex { get => _dietTypeIndex; set { _dietTypeIndex = value; OnPropertyChanged(); } }
 
         private double _compostPercent;
         public double CompostPercent { get => _compostPercent; set { _compostPercent = value; OnPropertyChanged(); } }
 
-        // --- RESULTS VISUALIZATION ---
+
         private double _totalTonsResult;
         public double TotalTonsResult { get => _totalTonsResult; set { _totalTonsResult = value; OnPropertyChanged(); } }
 
@@ -63,7 +59,6 @@ namespace Proiect2
         private string _comparisonMessage;
         public string ComparisonMessage { get => _comparisonMessage; set { _comparisonMessage = value; OnPropertyChanged(); } }
 
-        // --- COMMANDS ---
         public ICommand CalculateCommand { get; }
         public ICommand ResetCommand { get; }
         public ICommand ToggleHistoryCommand { get; }
@@ -89,9 +84,9 @@ namespace Proiect2
             CompostPercent = 0;
 
             VehicleTypeIndex = 0;
-            TransitFreqIndex = 0; // Reset
-            TransitTypeIndex = 0; // Reset
-            GadgetFreqIndex = 0;  // Reset
+            TransitFreqIndex = 0; 
+            TransitTypeIndex = 0; 
+            GadgetFreqIndex = 0;  
             DietTypeIndex = 0;
 
             ResultVisible = false;
@@ -102,50 +97,45 @@ namespace Proiect2
         {
             double totalCo2 = 0;
 
-            // 1. Travel Calculation
+
             double carFactor = VehicleTypeIndex switch
             {
-                0 => 0.20, // Gas
-                1 => 0.12, // Hybrid
-                2 => 0.05, // Electric
-                _ => 0.0   // Bike/Walk
+                0 => 0.20,
+                1 => 0.12,
+                2 => 0.05, 
+                _ => 0.0  
             };
             totalCo2 += KmDriven * carFactor;
             totalCo2 += FlightsCount * 400;
 
-            // RESTORED: Transit Logic
             double transitBase = 0;
-            if (TransitFreqIndex == 1) transitBase = 300;       // Weekly
-            else if (TransitFreqIndex == 2) transitBase = 1200; // Daily
+            if (TransitFreqIndex == 1) transitBase = 300;      
+            else if (TransitFreqIndex == 2) transitBase = 1200; 
 
-            // Adjust for Train (more efficient than bus)
             if (TransitTypeIndex == 1) transitBase *= 0.6;
             totalCo2 += transitBase;
 
-            // 2. Home Calculation
             double annualKwh = MonthlyKwh * 12;
             double renewableFactor = 1.0 - (RenewableEnergyPercent / 100.0);
             totalCo2 += annualKwh * 0.417 * renewableFactor;
             totalCo2 += NewGarments * 15.0;
 
-            // RESTORED: Gadget Logic
             if (GadgetFreqIndex == 1) totalCo2 += 150;
             else if (GadgetFreqIndex == 2) totalCo2 += 400;
 
-            // 3. Food Calculation
+  
             double baseDietEmission = DietTypeIndex switch
             {
-                0 => 2000, // Meat
-                1 => 1200, // Veg
-                _ => 1000  // Vegan
+                0 => 2000, 
+                1 => 1200, 
+                _ => 1000  
             };
             double compostFactor = (CompostPercent / 100.0) * 0.25;
             totalCo2 += baseDietEmission * (1.0 - compostFactor);
 
-            // Final Result in Tons
             TotalTonsResult = totalCo2 / 1000.0;
 
-            // --- VISUAL LOGIC ---
+
             double maxScale = 8.0;
             FootprintProgress = TotalTonsResult / maxScale;
             if (FootprintProgress > 1.0) FootprintProgress = 1.0;
@@ -170,7 +160,7 @@ namespace Proiect2
             await _dbService.AddRecord(TotalTonsResult);
         }
 
-        // --- HISTORY LOGIC ---
+
         public ObservableCollection<CarbonRecord> HistoryList { get; } = new ObservableCollection<CarbonRecord>();
 
         private bool _isHistoryVisible = false;
